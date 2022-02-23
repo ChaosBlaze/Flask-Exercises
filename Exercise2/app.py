@@ -1,29 +1,27 @@
 from flask import Flask, render_template, request
-
 app = Flask(__name__)
-
 @app.route('/')
-
 def home():
-    return render_template ('home.html')
+    return render_template('index.html')
+    
+@app.route('/calculate', methods=['get'])
+def calc():
 
-
-@app.route('/calculate')
-
-def calc(number=None):
-    if len(request.args)==0:
-        return render_template ('calculate.html')
-    number = request.args['number']
+    number = request.args.get('number')
+    msg = ''
     try:
-        if int (number)%2==0:
+
+        if int(number)%2==0:
             msg='even'
-        elif int (number) %2!=0:
+        elif int(number)%2!=0:
             msg='odd'
-
-
     except:
-        msg='not an integer!'
-    return render_template('calculate.html', num=number, name=msg)
+        if (number) == "":
+            msg='No number provided!'
+        
+        else:
+            msg='not an integer!'
 
-    if __name__ == '__main__':
-        app.run(debug=True)
+
+    return render_template('calculate.html', msg=msg, number=number)
+
